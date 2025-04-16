@@ -44,4 +44,24 @@ public class UsuarioService {
         }
     }
 
+    @Tool(name = "deletar_usuario_por_id", description = "Deletar um usuário por ID.")
+    public void deletarUsuarioPorId(Long idUsuario) {
+        WebClient webClient = WebClient.create("https://ebv.outsystemscloud.com/UsuariosMCP/rest/MCP");
+
+        try {
+            webClient.delete()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/DeletarUsuario")
+                            .queryParam("IdUsuario", idUsuario)
+                            .build())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
+            System.out.println("Usuário com ID " + idUsuario + " deletado com sucesso.");
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar usuário: " + e.getMessage());
+        }
+    }
+
 }
