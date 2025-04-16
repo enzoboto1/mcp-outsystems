@@ -64,4 +64,23 @@ public class UsuarioService {
         }
     }
 
+    @Tool(name = "alterar_usuario", description = "Alterar dados de um usuário passando ID, NOME e CPF.")
+    public void alterarUsuario(Usuario usuario) {
+        WebClient webClient = WebClient.create("https://ebv.outsystemscloud.com/UsuariosMCP/rest/MCP");
+
+        try {
+            webClient.put()
+                    .uri("/AlterarUsuario")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(usuario)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
+            System.out.println("Usuário com ID " + usuario.getIdUsuario() + " alterado com sucesso.");
+        } catch (Exception e) {
+            System.err.println("Erro ao alterar usuário: " + e.getMessage());
+        }
+    }
+
 }
