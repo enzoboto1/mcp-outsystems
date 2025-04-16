@@ -22,4 +22,26 @@ public class UsuarioService {
                 .subscribe();
     }
 
+    @Tool(name = "buscar_usuario_por_cpf", description = "Buscar um usuário por CPF.")
+    public Usuario buscarUsuarioPorCPF(String cpf) {
+        WebClient webClient = WebClient.create("https://ebv.outsystemscloud.com/UsuariosMCP/rest/MCP");
+
+        try {
+            return webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/BuscarUsuarioPorCPF")
+                            .queryParam("CPF", cpf)
+                            .build())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Usuario.class)
+                    .doOnNext(usuario -> System.out.println("Usuário encontrado: " + usuario.getNome()))
+                    .block();
+
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar usuário: " + e.getMessage());
+            return null;
+        }
+    }
+
 }
