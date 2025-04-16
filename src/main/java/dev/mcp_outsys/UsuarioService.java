@@ -5,6 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 @Service
 public class UsuarioService {
 
@@ -80,6 +82,25 @@ public class UsuarioService {
             System.out.println("Usuário com ID " + usuario.getIdUsuario() + " alterado com sucesso.");
         } catch (Exception e) {
             System.err.println("Erro ao alterar usuário: " + e.getMessage());
+        }
+    }
+
+    @Tool(name = "buscar_todos_usuarios", description = "Buscar e retornar todos os usuários.")
+    public List<Usuario> buscarTodosUsuarios() {
+        WebClient webClient = WebClient.create("https://ebv.outsystemscloud.com/UsuariosMCP/rest/MCP");
+
+        try {
+            return webClient.get()
+                    .uri("/BuscarTodosUsuarios")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToFlux(Usuario.class)
+                    .collectList()
+                    .block();
+
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar todos os usuários: " + e.getMessage());
+            return null;
         }
     }
 
