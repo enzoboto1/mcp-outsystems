@@ -20,6 +20,7 @@ public class UsuarioService {
                 .doOnNext(response -> System.out.println("Resposta da API: " + response))
                 .doOnError(error -> System.err.println("Erro: " + error.getMessage()))
                 .subscribe();
+
     }
 
 }
